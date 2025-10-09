@@ -97,7 +97,7 @@ class _SplashScreenState extends State<SplashScreen>
                     children: [
                       // ✅ Logo from assets
                       Image.asset(
-                        "assets/images/logo.png",
+                        "assets/images/Xylo.jpeg",
                         height: 200,
                       ),
 

@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/auth_input_field.dart';
 import '../widgets/gradient_button.dart';
-import '../widgets/logo_html_view.dart';
 import '../../services/auth_service.dart';
 import 'signup_screen.dart';
 import 'forgot_password_screen.dart';
 import 'dashboard_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _authService = AuthService();
   bool _isLoading = false;
+  bool _isGoogleLoading = false; // 👈 Google login loading
 
   @override
   void dispose() {
@@ -42,7 +44,6 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
         if (success && mounted) {
-          // Navigate to dashboard screen after successful login
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -69,15 +70,66 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  // 🧠 Google Sign-In Method
+  Future<void> _handleGoogleSignIn() async {
+    try {
+      setState(() {
+        _isGoogleLoading = true;
+      });
+
+      final googleSignIn = GoogleSignIn(
+        scopes: <String>['email'],
+      );
+
+      final googleUser = await googleSignIn.signInSilently() ?? await googleSignIn.signIn();
+
+      if (googleUser == null) {
+        setState(() {
+          _isGoogleLoading = false;
+        });
+        return;
+      }
+
+      final googleAuth = await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DashboardScreen(),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Google Sign-In failed: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isGoogleLoading = false;
+        });
+      }
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
-    final bool isKeyboardOpen = MediaQuery
-        .of(context)
-        .viewInsets
-        .bottom > 0;
-    final Size screenSize = MediaQuery
-        .of(context)
-        .size;
+    final bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+    final Size screenSize = MediaQuery.of(context).size;
     final bool isSmallHeight = screenSize.height < 700;
     final double basePadding = 16;
     final double topSpacing = 8;
@@ -101,18 +153,16 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SafeArea(
           child: Column(
             children: [
-
-              /// 🔹 Top Section (Logo + Welcome) -> No Expanded
+              /// 🔹 Top Section (Logo + Welcome)
               Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: basePadding, vertical: 16),
+                padding:
+                EdgeInsets.symmetric(horizontal: basePadding, vertical: 16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Logo
-                     Center(
+                    Center(
                       child: Image.asset(
-                        "assets/images/logo.png",
+                        "assets/images/Xylo.jpeg",
                         height: 200,
                       ),
                     ),
@@ -127,7 +177,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     SizedBox(height: topSpacing),
-                    // Welcome text
                     Text(
                       'WELCOME',
                       style: GoogleFonts.montserrat(
@@ -149,7 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
 
-              /// 🔹 Bottom Section (Form) -> Scrollable
+              /// 🔹 Bottom Section (Form)
               Expanded(
                 child: Container(
                   decoration: const BoxDecoration(
@@ -159,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       topRight: Radius.circular(24),
                     ),
                   ),
-                  child: SingleChildScrollView( // 👈 added scroll
+                  child: SingleChildScrollView(
                     padding: EdgeInsets.all(basePadding),
                     child: Form(
                       key: _formKey,
@@ -200,8 +249,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (
-                                        context) => const ForgotPasswordScreen(),
+                                    builder: (context) =>
+                                    const ForgotPasswordScreen(),
                                   ),
                                 );
                               },
@@ -227,11 +276,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           const SizedBox(height: 10),
                           Row(
                             children: [
-                              Expanded(child: Container(
-                                  height: 1, color: Colors.grey[300])),
+                              Expanded(
+                                  child: Container(
+                                      height: 1, color: Colors.grey[300])),
                               Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12),
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 12),
                                 child: Text(
                                   'or',
                                   style: GoogleFonts.montserrat(
@@ -240,8 +290,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                               ),
-                              Expanded(child: Container(
-                                  height: 1, color: Colors.grey[300])),
+                              Expanded(
+                                  child: Container(
+                                      height: 1, color: Colors.grey[300])),
                             ],
                           ),
                           const SizedBox(height: 10),
@@ -261,6 +312,46 @@ class _LoginScreenState extends State<LoginScreen> {
                             textColor: const Color(0xFF483D8B),
                             borderColor: const Color(0xFF9B59B6),
                             height: 46,
+                          ),
+                          const SizedBox(height: 15),
+
+                          // 🟡 Google Sign-In Button
+                          ElevatedButton.icon(
+                            onPressed: _isGoogleLoading
+                                ? null
+                                : _handleGoogleSignIn,
+                            icon: _isGoogleLoading
+                                ? const SizedBox(
+                              height: 22,
+                              width: 22,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.black87,
+                              ),
+                            )
+                                : Image.asset(
+                              'assets/images/google_logo.png', // 👈 add in assets
+                              height: 24,
+                            ),
+                            label: Text(
+                              _isGoogleLoading
+                                  ? 'Signing in...'
+                                  : 'Sign in with Google',
+                              style: GoogleFonts.montserrat(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black87,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                side: const BorderSide(color: Colors.grey),
+                              ),
+                              minimumSize: const Size(double.infinity, 46),
+                            ),
                           ),
                         ],
                       ),

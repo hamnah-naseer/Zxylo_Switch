@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart'; // ✅ screenutil import
 import 'features/auth/presentation/screens/splash_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:google_sign_in/google_sign_in.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); // ✅ Firebase init
-
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
