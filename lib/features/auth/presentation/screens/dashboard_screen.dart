@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../services/auth_service.dart';
+import 'add_room_screen.dart';
 import 'energy_consumption_screen.dart';
 import 'package:xyloswitch/features/home/presentation/screens/home_screen.dart';
 
@@ -16,6 +17,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool isEditingHouseName = false;
   final TextEditingController _houseNameController = TextEditingController();
   final _authService = AuthService();
+  List<Map<String, dynamic>> rooms = [];
+
 
   @override
   void initState() {
@@ -40,13 +43,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> _refreshDashboard() async {
     // TODO: Implement dashboard refresh logic
-    // This could include:
-    // - Fetching latest device statuses
-    // - Updating energy consumption data
-    // - Refreshing room information
-    // - Getting latest alerts
-
-    // Simulate a delay for demo purposes
     await Future.delayed(const Duration(milliseconds: 1000));
 
     if (mounted) {
@@ -148,7 +144,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 10,
                         offset: const Offset(0, 2),
                       ),
@@ -205,7 +201,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 2),
                 ),
@@ -254,7 +250,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 2),
                 ),
@@ -362,7 +358,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -460,7 +456,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -514,29 +510,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                _buildRoomCard(
-                  name: 'Living Room',
-                  devices: [
-                    {'icon': Icons.lightbulb_outline, 'name': 'Lights', 'status': 'ON'},
-                    {'icon': Icons.air, 'name': 'Fan', 'status': 'OFF'},
-                  ],
-                ),
-                const SizedBox(width: 16),
-                _buildRoomCard(
-                  name: 'Bedroom',
-                  devices: [
-                    {'icon': Icons.lightbulb_outline, 'name': 'Lights', 'status': 'OFF'},
-                    {'icon': Icons.ac_unit, 'name': 'AC', 'status': 'ON'},
-                  ],
-                ),
-                const SizedBox(width: 16),
-                _buildRoomCard(
-                  name: 'Kitchen',
-                  devices: [
-                    {'icon': Icons.lightbulb_outline, 'name': 'Lights', 'status': 'OFF'},
-                  ],
-                ),
-                const SizedBox(width: 16),
+                for (var room in rooms) ...[
+                  _buildRoomCard(
+                    name: room['name'],
+                    devices: List<Map<String, dynamic>>.from(room['devices']),
+                  ),
+                  const SizedBox(width: 16),
+                ],
                 _buildAddRoomCard(),
               ],
             ),
@@ -545,7 +525,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-
   Widget _buildRoomCard({required String name, required List<Map<String, dynamic>> devices}) {
     return GestureDetector(
       onTap: _navigateToHomeScreen,
@@ -557,7 +536,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -576,28 +555,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              ...devices.map((device) => Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Row(
-                  children: [
-                    Icon(
-                      device['icon'],
-                      size: 16,
-                      color: device['status'] == 'ON' ? Colors.green : Colors.grey,
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        '${device['name']} ${device['status']}',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 11,
-                          color: Colors.black54,
+              ...devices.map((device){
+                bool isOn = device['status'] == 'ON';
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Icon(
+                              device['icon'],
+                              size: 16,
+                              color: isOn ? Colors.green : Colors.grey,
+                            ),
+                            const SizedBox(width: 6),
+                            Flexible(
+                              child: Text(
+                                device['name'],
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 11,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              )).toList(),
+                      Switch(
+                        value: isOn,
+                        activeColor: Colors.green,
+                        onChanged: (value) {
+                          setState(() {
+                            device['status'] = value ? 'ON' : 'OFF';
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
             ],
           ),
         ),
@@ -606,6 +606,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+
+
+
+
   Widget _buildAddRoomCard() {
     return GestureDetector(
       onTap: () => _navigateToAddRoomPage(),
@@ -613,12 +617,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
         width: 140,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.white70,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: const Color(0xFF483D8B), width: 2, style: BorderStyle.solid),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -700,7 +704,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF483D8B).withOpacity(0.3),
+              color: const Color(0xFF483D8B).withValues(alpha: 0.3),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -754,7 +758,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 2),
                 ),
@@ -765,7 +769,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF483D8B).withOpacity(0.1),
+                    color: const Color(0xFF483D8B).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(
@@ -828,11 +832,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  void _navigateToAddRoomPage() {
-    // TODO: Navigate to add room page
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Navigating to Add Room Page')),
+  void _navigateToAddRoomPage() async {
+    final newRoom = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const AddRoomScreen(),
+      ),
     );
+
+    if (newRoom != null) {
+      setState(() {
+        rooms.add(newRoom);
+      });
+    }
   }
 
   void _navigateToAddDevicePage() {

@@ -77,8 +77,9 @@ class _SplashScreenState extends State<SplashScreen>
             end: Alignment.bottomCenter,
             colors: [
               Colors.white,
-              Color(0xFF20B2AA),
-              Color(0xFF483D8B),
+              Color(0xFF0D1321),
+              Color(0xFF1D2D44),
+              Color(0xFF3E5C76),
             ],
             stops: [0.0, 0.3, 1.0],
 
@@ -109,7 +110,7 @@ class _SplashScreenState extends State<SplashScreen>
                         style: GoogleFonts.montserrat(
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white.withValues(alpha:0.9),
                         ),
                       ),
 

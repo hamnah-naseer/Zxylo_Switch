@@ -45,6 +45,8 @@ dependencies:
   fl_chart: ^0.60.0
   vector_math: 2.1.4
   google_sign_in: ^7.2.0
+  font_awesome_flutter: ^10.9.1
+
 
 dev_dependencies:
   flutter_test:

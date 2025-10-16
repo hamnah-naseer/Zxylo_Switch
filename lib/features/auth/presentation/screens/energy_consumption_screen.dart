@@ -106,7 +106,17 @@ class _EnergyConsumptionScreenState extends State<EnergyConsumptionScreen>
           children: [
             // Summary Cards
             _buildSummaryCards(),
-
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Text(
+                _selectedTabIndex == 0 ? '📈 Line Chart View' : '📊 Bar Graph View',
+                style: GoogleFonts.montserrat(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
             // Tab Bar
             Container(
               margin: const EdgeInsets.all(16),
@@ -115,7 +125,7 @@ class _EnergyConsumptionScreenState extends State<EnergyConsumptionScreen>
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha:0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -192,6 +202,9 @@ class _EnergyConsumptionScreenState extends State<EnergyConsumptionScreen>
       ),
     );
   }
+
+
+
 
   Widget _buildSummaryCard({
     required String title,
