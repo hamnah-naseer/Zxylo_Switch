@@ -9,23 +9,25 @@ class GradientButton extends StatelessWidget {
   final Color? borderColor;
   final double? height;
   final double? width;
+  final Widget? icon;
 
   const GradientButton({
     super.key,
     required this.text,
     required this.onPressed,
-    this.gradient,
+    required this.gradient,
+    required this.borderColor,
+    required this.height,
     this.textColor,
-    this.borderColor,
-    this.height,
     this.width,
+    this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width ?? double.infinity,
-      height: height ?? 50,
+      height: height ?? 55,
       decoration: BoxDecoration(
         gradient: gradient,
         borderRadius: BorderRadius.circular(25),
@@ -33,21 +35,30 @@ class GradientButton extends StatelessWidget {
             ? Border.all(color: borderColor!, width: 1)
             : null,
       ),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-        child: Text(
-          text,
-          style: GoogleFonts.montserrat(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: textColor ?? Colors.white,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(8),
+          child: Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (icon != null) ...[
+                  icon!,
+                  const SizedBox(width: 8),
+                ],
+                Text(
+                  text,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

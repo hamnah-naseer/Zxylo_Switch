@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../services/auth_service.dart';
 import 'add_room_screen.dart';
+import 'dart:ui';
 import 'energy_consumption_screen.dart';
 import 'package:xyloswitch/features/home/presentation/screens/home_screen.dart';
 
@@ -54,6 +55,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
       );
     }
   }
+  Widget glassContainer({required Widget child, double opacity = 0.15}) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(opacity),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.2),
+              width: 1.5,
+            ),
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,12 +92,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [
-        Colors.white,
-        Color(0xFF20B2AA),
-    Color(0xFF483D8B),
-    ],
-    stops: [0.0, 0.3, 1.0],
+          colors: [
+            Color(0xFF3E5C76),Color(0xFF1D2D44) ],
+          stops: [0.0, 0.3, ],
     ),
     ),
       child: SafeArea(
@@ -351,56 +368,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(
-              icon,
-              color: const Color(0xFF483D8B),
-              size: 24,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: GoogleFonts.montserrat(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: Colors.black54,
+      child: glassContainer(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, color: Colors.white, size: 24),
+              const SizedBox(height: 8),
+              Text(
+                title,
+                style: GoogleFonts.montserrat(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white.withOpacity(0.8),
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              value,
-              style: GoogleFonts.montserrat(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
+              const SizedBox(height: 4),
+              Text(
+                value,
+                style: GoogleFonts.montserrat(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            Text(
-              subtitle,
-              style: GoogleFonts.montserrat(
-                fontSize: 11,
-                color: Colors.black45,
+              Text(
+                subtitle,
+                style: GoogleFonts.montserrat(
+                  fontSize: 11,
+                  color: Colors.white.withOpacity(0.7),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
+
   }
 
   Widget _buildQuickControlsSection() {
@@ -700,7 +705,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         decoration: BoxDecoration(
-          color: const Color(0xFF483D8B),
+          color: const Color(0xFF1D2D44 ),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(

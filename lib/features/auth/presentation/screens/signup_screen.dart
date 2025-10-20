@@ -368,6 +368,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                 Color(0xFF9B59B6), // Purple
                               ],
                             ),
+                            borderColor: const Color(0xFF9B59B6),
+                            height: 46,
                           ),
 
                           const SizedBox(height: 20),
