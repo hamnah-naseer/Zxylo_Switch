@@ -9,13 +9,11 @@ class EnergyConsumptionScreen extends StatefulWidget {
   @override
   State<EnergyConsumptionScreen> createState() => _EnergyConsumptionScreenState();
 }
-
 class _EnergyConsumptionScreenState extends State<EnergyConsumptionScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int _selectedTabIndex = 0;
 
-  // Sample data for energy consumption
   final List<Map<String, dynamic>> _energyData = [
     {'hour': '00:00', 'monday': 2.1, 'tuesday': 1.8, 'wednesday': 2.3, 'thursday': 1.9, 'friday': 2.0, 'saturday': 1.7, 'sunday': 1.6},
     {'hour': '01:00', 'monday': 1.5, 'tuesday': 1.4, 'wednesday': 1.6, 'thursday': 1.3, 'friday': 1.5, 'saturday': 1.2, 'sunday': 1.1},
@@ -53,17 +51,14 @@ class _EnergyConsumptionScreenState extends State<EnergyConsumptionScreen>
       });
     });
   }
-
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -109,7 +104,7 @@ class _EnergyConsumptionScreenState extends State<EnergyConsumptionScreen>
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Text(
-                _selectedTabIndex == 0 ? '📈 Line Chart View' : '📊 Bar Graph View',
+                _selectedTabIndex == 0 ? ' Line Chart View' : ' Bar Graph View',
                 style: GoogleFonts.montserrat(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -202,9 +197,6 @@ class _EnergyConsumptionScreenState extends State<EnergyConsumptionScreen>
       ),
     );
   }
-
-
-
 
   Widget _buildSummaryCard({
     required String title,
@@ -384,7 +376,6 @@ class _EnergyConsumptionScreenState extends State<EnergyConsumptionScreen>
                       color: const Color(0xFF2196F3).withValues(alpha :0.1),
                     ),
                   ),
-                  // Wednesday line
                   LineChartBarData(
                     spots: _energyData.asMap().entries.map((entry) {
                       return FlSpot(entry.key.toDouble(), entry.value['wednesday']);

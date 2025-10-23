@@ -87,17 +87,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
           size: 28,
         ),
       ),
-        body: Container(
-        decoration: const BoxDecoration(
-        gradient: LinearGradient(
+      body: Stack(
+        children: [
+      // 🔹 Gradient Background
+      Container(
+      decoration: const BoxDecoration(
+      gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFF3E5C76),Color(0xFF1D2D44) ],
-          stops: [0.0, 0.3, ],
+        colors: [Color(0xFF3E5C76), Color(0xFF1D2D44)],
+        stops: [0.0, 0.3],
+      ),
     ),
     ),
-      child: SafeArea(
+    BackdropFilter(
+    filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
+    child: Container(
+    color: Colors.white.withValues(alpha: 0.08), // global frost tint
+    ),
+    ),
+
+      SafeArea(
         child: RefreshIndicator(
           onRefresh: _refreshDashboard,
           child: CustomScrollView(
@@ -141,7 +151,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
 
-    ),
+    ]),
     );
   }
 
@@ -150,7 +160,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          // House icon and name
           Expanded(
             child: Row(
               children: [
@@ -209,8 +218,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
           ),
-
-          // Notification bell
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
@@ -606,14 +613,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           ),
         ),
-
       ),
     );
   }
-
-
-
-
 
   Widget _buildAddRoomCard() {
     return GestureDetector(
@@ -724,7 +726,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               size: 20,
             ),
             const SizedBox(width: 8),
-
             Flexible(
               child:Text(
                 text,
@@ -1113,10 +1114,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-// Placeholder notification screen
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

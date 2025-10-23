@@ -73,13 +73,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Top bar
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
-                      children: List.generate(
-                        3,
+                      children: List.generate(3,
                             (index) => Container(
                           margin: const EdgeInsets.only(right: 4),
                           width: 6,
@@ -109,10 +107,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 40),
-
-                // Icon
                 Container(
                   width: 80,
                   height: 80,
@@ -126,10 +121,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     color: Color(0xFF483D8B),
                   ),
                 ),
-
                 const SizedBox(height: 24),
-
-                // Title Centered
                 Center(
                   child: Text(
                     'Forgot Password?',
@@ -141,10 +133,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
-
-                // Subtitle
                 Text(
                   "No worries, we'll send you\nreset instructions.",
                   textAlign: TextAlign.center,
@@ -155,10 +144,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     height: 1.4,
                   ),
                 ),
-
                 const SizedBox(height: 40),
-
-                // Form
                 Form(
                   key: _formKey,
                   child: Column(
@@ -213,8 +199,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ),
                       ),
                       const SizedBox(height: 30),
-
-                      // Gradient Button
                       SizedBox(
                         width: double.infinity,
                         height: 50,
@@ -248,10 +232,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 30),
-
-                      // Back to login
                       TextButton(
                         onPressed: () {
                           Navigator.pushReplacement(
@@ -273,11 +254,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 40),
-
-                // Bottom icon
-
               ],
             ),
           ),

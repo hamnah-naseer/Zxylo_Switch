@@ -66,26 +66,7 @@ class BackgroundRoomCard extends StatelessWidget {
               padding: EdgeInsets.all(12.sp),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _DeviceIconSwitcher(
-                    onTap: (value) {},
-                    icon: const Icon(SHIcons.lightBulbOutline),
-                    label: const Text('Lights'),
-                    value: room.lights.isOn,
-                  ),
-                  _DeviceIconSwitcher(
-                    onTap: (value) {},
-                    icon: const Icon(SHIcons.fan),
-                    label: const Text('Air-conditioning'),
-                    value: room.airCondition.isOn,
-                  ),
-                  _DeviceIconSwitcher(
-                    onTap: (value) {},
-                    icon: const Icon(SHIcons.music),
-                    label: const Text('Music'),
-                    value: room.musicInfo.isOn,
-                  ),
-                ],
+
               ),
             ),
           ],

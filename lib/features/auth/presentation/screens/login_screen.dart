@@ -12,7 +12,6 @@ import 'signup_screen.dart';
 import 'forgot_password_screen.dart';
 import 'dashboard_screen.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -45,7 +44,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<bool> login() async {
     final user = await GoogleSignIn.instance.authenticate();
     if (user == null) {
-      // user cancelled the sign-in
       return false;
     }
     final userAuth = await user.authentication;
@@ -56,8 +54,6 @@ class _LoginScreenState extends State<LoginScreen> {
     await FirebaseAuth.instance.signInWithCredential(credential);
     return FirebaseAuth.instance.currentUser != null;
   }
-
-
   Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
@@ -97,8 +93,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
@@ -115,9 +109,16 @@ class _LoginScreenState extends State<LoginScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF1D2D44),
-              Color(0xFF3E5C76)],
-            stops: [ 0.5,1.0],
+            colors: [
+              Color(0xFFFFFafa),
+              //Color(0xFFFFFDD0),
+              //Color(0xFF0D1321),
+              //Color(0xFF1D2D44),
+              //Color(0xFF3E5C76),
+
+            ],
+              stops: [0.1]
+            //stops: [0.0, 0.5, 1.0],
           ),
         ),
         child: SafeArea(
@@ -125,24 +126,24 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Padding(
                 padding:
-                EdgeInsets.only(top: 60, left: basePadding, right: basePadding),
+                EdgeInsets.only(top: 20, left: basePadding, right: basePadding),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Center(
                       child: Image.asset(
                         "assets/images/xylo.png",
-                        height: 200,
+                        height: 250,
                       ),
                     ),
                     const SizedBox(height: 12),
                     Text(
                       'WELCOME',
                       style: GoogleFonts.montserrat(
-                        fontSize: 28,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,  // or any color matching your background
-                        letterSpacing: 2,     // gives elegant spacing
+                        color: Colors.black87,
+                        letterSpacing: 2,
                       ),
                     ),
                   ],
@@ -150,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 60),
+                  padding: const EdgeInsets.only(top: 20),
                   child: ClipRRect(
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(24),
@@ -160,13 +161,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha:0.6), // transparent glass
+                          gradient: LinearGradient(
+                            colors: [
+                              //Color(0xFF1D2D44),
+                              //Color(0xFFFFFAFA),
+                              Color(0xFF3E5C76),
+                            ],
+                            stops: [ 0.5],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),                                          //----->changes
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(24),
                             topRight: Radius.circular(24),
                           ),
                           border: Border.all(
-                            color: Colors.white.withValues(alpha:0.65), // frosted border
+                            color: Colors.indigoAccent.withValues(alpha:0.65),  //----->changes
                             width: 1.0,
                           ),
                           boxShadow: [
@@ -228,24 +238,29 @@ class _LoginScreenState extends State<LoginScreen> {
                                       style: GoogleFonts.montserrat(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
-                                        color: const Color(0xFF9B59B6),
+                                        color: const Color(0xFFFFFafa),
                                       ),
                                     ),
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-
                                 GradientButton(
                                   text: _isLoading ? 'Logging in...' : 'Login',
                                   onPressed: _isLoading ? null : _handleLogin,
                                   gradient: const LinearGradient(
-                                    colors: [Color(0xFF9B59B6), Color(0xFF20B2AA)],
+                                    colors: [//Color(0xFFB478CC),Color(0xFF9C6CFF),
+                                      //Color(0xFFB478CC), // lighter version of #3E5C76
+                                      Color(0xFF9B59B6), Color(0xFF20B2AA)
+                                      //Color(0xFF6C9FFF),
+                                      //Color(0xFF55C5C5),
+                                  ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
                                   ),
                                   borderColor: const Color(0xFF9B59B6),
-                                  height: 46,
+                                  height: 46, //46
                                 ),
-                                const SizedBox(height: 10),
-
+                                const SizedBox(height: 7), //10
                                 GradientButton(
                                   text: _isGoogleLoading
                                       ? 'Signing in...'
@@ -270,7 +285,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     setState(() => _isGoogleLoading = true);
                                     bool isLogged = await login();
                                     setState(() => _isGoogleLoading = false);
-
                                     if (isLogged) {
                                       Navigator.pushReplacement(
                                         context,
@@ -286,7 +300,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   borderColor: const Color(0xFF9B59B6),
                                   height: 46,
                                 ),
-
                                 Align(
                                   alignment: Alignment.center,
                                   child: TextButton(
@@ -303,11 +316,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                       style: GoogleFonts.montserrat(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
-                                        color: const Color(0xFF9B59B6),
+                                        color: const Color(0xFFFFFafa),
                                       ),
                                     ),
                                   ),
                                 ),
+
+
                               ],
                             ),
                           ),
@@ -317,7 +332,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-
             ],
           ),
         ),

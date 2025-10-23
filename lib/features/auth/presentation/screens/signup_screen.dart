@@ -170,8 +170,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             ),
 
                             const SizedBox(height: 20),
-
-                            // Title
                             Text(
                               "Let's Register\nYour Home",
                               textAlign: TextAlign.center,
@@ -189,8 +187,6 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
               ),
-
-              // Form section
               Expanded(
                 flex: 3,
                 child: Container(
@@ -209,8 +205,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           const SizedBox(height: 20),
-
-                          // Input fields
                           AuthInputField(
                             controller: _houseNameController,
                             hintText: 'House Name',
@@ -222,7 +216,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             },
                           ),
                           const SizedBox(height: 16),
-
                           AuthInputField(
                             controller: _fullNameController,
                             hintText: 'Full Name',
@@ -235,7 +228,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             },
                           ),
                           const SizedBox(height: 16),
-
                           AuthInputField(
                             controller: _emailController,
                             hintText: 'Email Address',
@@ -251,7 +243,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             },
                           ),
                           const SizedBox(height: 16),
-
                           AuthInputField(
                             controller: _contactController,
                             hintText: 'Contact',
@@ -264,7 +255,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             },
                           ),
                           const SizedBox(height: 16),
-
                           AuthInputField(
                             controller: _passwordController,
                             hintText: 'Password',
@@ -281,7 +271,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             },
                           ),
                           const SizedBox(height: 16),
-
                           AuthInputField(
                             controller: _confirmPasswordController,
                             hintText: 'Confirm Password',
@@ -298,7 +287,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             },
                           ),
                           const SizedBox(height: 16),
-
                           AuthInputField(
                             controller: _retypePasswordController,
                             hintText: 'Retype Password',
@@ -314,10 +302,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               return null;
                             },
                           ),
-
                           const SizedBox(height: 20),
-
-                          // Terms checkbox
                           Row(
                             children: [
                               Checkbox(
@@ -355,26 +340,20 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                             ],
                           ),
-
                           const SizedBox(height: 30),
-
-                          // Sign up button
                           GradientButton(
                             text: _isLoading ? 'Creating Account...' : 'Sign Up',
                             onPressed: _isLoading ? null : _handleSignup,
                             gradient: const LinearGradient(
                               colors: [
-                                Color(0xFF2ECC71), // Light green
-                                Color(0xFF9B59B6), // Purple
+                                Color(0xFF2ECC71),
+                                Color(0xFF9B59B6),
                               ],
                             ),
                             borderColor: const Color(0xFF9B59B6),
                             height: 46,
                           ),
-
                           const SizedBox(height: 20),
-
-                          // Sign in link
                           Center(
                             child: RichText(
                               text: TextSpan(
@@ -396,7 +375,6 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                             ),
                           ),
-
                           const SizedBox(height: 20),
                         ],
                       ),

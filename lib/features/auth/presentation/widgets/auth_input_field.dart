@@ -30,10 +30,10 @@ class _AuthInputFieldState extends State<AuthInputField> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF483D8B).withOpacity(0.1),
+        color: const Color(0xFFAEAAC5).withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: const Color(0xFF483D8B).withOpacity(0.3),
+          color: const Color(0xFFFFFafa).withValues(alpha:0.3),
           width: 1,
         ),
       ),
@@ -43,18 +43,18 @@ class _AuthInputFieldState extends State<AuthInputField> {
         keyboardType: widget.keyboardType ?? TextInputType.text,
         style: GoogleFonts.montserrat(
           fontSize: 14,
-          color: const Color(0xFF483D8B),
+          color: const Color(0xFFCBC9E6),
         ),
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: GoogleFonts.montserrat(
             fontSize: 14,
-            color: const Color(0xFF483D8B).withOpacity(0.6),
+            color: const Color(0xFFEAEDF3).withValues(alpha:0.6),
           ),
           prefixIcon: widget.icon != null
               ? Icon(
             widget.icon,
-            color: const Color(0xFF483D8B).withOpacity(0.7),
+            color: const Color(0xFFFFFafa).withValues(alpha:0.7),
             size: 20,
           )
               : null,
@@ -62,7 +62,7 @@ class _AuthInputFieldState extends State<AuthInputField> {
               ? IconButton(
             icon: Icon(
               _obscureText ? Icons.visibility : Icons.visibility_off,
-              color: const Color(0xFF483D8B).withOpacity(0.7),
+              color: const Color(0xFFFFFafa).withOpacity(0.7),
               size: 20,
             ),
             onPressed: () {

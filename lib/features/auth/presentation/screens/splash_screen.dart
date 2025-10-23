@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dashboard_screen.dart';
 import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -37,13 +38,13 @@ class _SplashScreenState extends State<SplashScreen>
     _animationController.forward();
 
 
-    Timer(const Duration(seconds: 10), () {
+    Timer(const Duration(seconds: 5), () {
       if (mounted) {
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) =>
-            const LoginScreen(),
+            const LoginScreen(), //const DashboardScreen()
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(opacity: animation, child: child);
             },
@@ -70,8 +71,9 @@ class _SplashScreenState extends State<SplashScreen>
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
+              Color(0xFF1D2D44),
               Color(0xFF3E5C76),
-            ],stops: [0.1]
+            ],stops: [0.1,0.2]
           ),
           //
 
@@ -101,105 +103,64 @@ class _SplashScreenState extends State<SplashScreen>
                 child: ScaleTransition(
                   scale: _scaleAnimation,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(30),
                     child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                      child: Container(
-                        width: 320,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 80, horizontal: 20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              Colors.white.withValues(alpha: 0.1),
-                              Colors.white.withValues(alpha: 0.2),
+                      filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+                      child: Stack(
+                        children: [
+
+                          Positioned.fill(
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: RadialGradient(
+                                  center: const Alignment(-0.6, -0.6),
+                                  radius: 0.8,
+                                  colors: [
+                                    Color(0xFF3E5C76).withValues(alpha:0.2),  //--->change
+                                    Colors.transparent,
+                                  ],
+                                  stops: const [0.0, 1.0],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(
+                                "assets/images/xylo.png",
+                                height: 250,
+                                fit: BoxFit.contain,
+                              ),
+                              const SizedBox(height: 20),
+                              Text(
+                                'Save Watts, Safe Wallets',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white.withValues(alpha:0.95),
+                                  //shadows: [
+                                  //Shadow(
+                                  //color: Color(0xFF3E5C76).withValues(alpha:0.3),
+                                  //blurRadius: 8,
+                                  //offset: const Offset(0, 0),
+                                  //),
+                                  //],
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 30),
+                              const CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
                             ],
                           ),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.3),
-                            width: 1.5,
-                          ),
-                          boxShadow: [
-                            //BoxShadow(
-                              //color: Colors.black.withValues(alpha: 0.4),
-                              //blurRadius: 20,
-                              //spreadRadius: 1,
-                              //offset: const Offset(0, 6),
-                            //),
-
-                            BoxShadow(
-                              color: Color(0xFF00b1f9).withValues(alpha: 0.4),
-                              blurRadius: 35,
-                              spreadRadius: 4,
-                              offset: const Offset(0, 0),
-                            ),
-                          ],
-                        ),
-
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(30),
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
-                            child: Stack(
-                              children: [
-
-                                Positioned.fill(
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      gradient: RadialGradient(
-                                        center: const Alignment(-0.6, -0.6),
-                                        radius: 0.8,
-                                        colors: [
-                                          Colors.white.withValues(alpha:0.2),
-                                          Colors.transparent,
-                                        ],
-                                        stops: const [0.0, 1.0],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Image.asset(
-                                      "assets/images/xylo.png",
-                                      height: 200,
-                                      fit: BoxFit.contain,
-                                    ),
-                                    const SizedBox(height: 20),
-                                    Text(
-                                      'Save Watts, Safe Energy',
-                                      style: GoogleFonts.montserrat(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white.withValues(alpha:0.95),
-                                        shadows: [
-                                          Shadow(
-                                            color: Colors.black.withValues(alpha:0.3),
-                                            blurRadius: 8,
-                                            offset: const Offset(1, 2),
-                                          ),
-                                        ],
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    const SizedBox(height: 30),
-                                    const CircularProgressIndicator(
-                                      color: Colors.white,
-                                      strokeWidth: 2,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        ],
                       ),
                     ),
                   ),
+
                 ),
               );
             },

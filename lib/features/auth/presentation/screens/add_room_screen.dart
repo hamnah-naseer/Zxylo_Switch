@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class AddRoomScreen extends StatefulWidget {
   const AddRoomScreen({super.key});
-
   @override
   State<AddRoomScreen> createState() => _AddRoomScreenState();
 }
@@ -24,7 +23,6 @@ class _AddRoomScreenState extends State<AddRoomScreen> {
       'status': 'OFF',
     })
         .toList();
-
     if (_roomNameController.text.isNotEmpty && selectedDevices.isNotEmpty) {
       Navigator.pop(context, {
         'name': _roomNameController.text,
