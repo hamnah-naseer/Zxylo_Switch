@@ -43,12 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
   Future<bool> login() async {
     final user = await GoogleSignIn.instance.authenticate();
-<<<<<<< Updated upstream
     if (user == null) {
-=======
-    if (user == null) { 
-      // user cancelled the sign-in
->>>>>>> Stashed changes
       return false;
     }
     final userAuth = await user.authentication;
