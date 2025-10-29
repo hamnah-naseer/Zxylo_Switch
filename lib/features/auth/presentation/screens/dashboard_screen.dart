@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../home/presentation/screens/main_layout.dart';
 import '../../services/auth_service.dart';
 import 'add_room_screen.dart';
 import 'dart:ui';
@@ -80,78 +81,102 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showQuickActionsSheet(),
-        backgroundColor: const Color(0xFF483D8B),
+        backgroundColor: const Color(0xFF35ADAB),
         child: const Icon(
           Icons.add,
           color: Colors.white,
           size: 28,
         ),
       ),
+
+      // 👇 ADD THIS NAV BAR HERE
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        selectedItemColor: Color(0xFF483D8B),
+        unselectedItemColor: Colors.grey,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Usage'),
+          BottomNavigationBarItem(icon: Icon(Icons.devices), label: 'Devices'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account'),
+        ],
+        // optional navigation logic
+        onTap: (index) {
+          // TODO: add navigation logic here
+          // Example:
+          // if (index == 0) Navigator.pushNamed(context, '/home');
+        },
+      ),
+
       body: Stack(
-        children: [
-      // 🔹 Gradient Background
-      Container(
-      decoration: const BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [Color(0xFF3E5C76), Color(0xFF1D2D44)],
-        stops: [0.0, 0.3],
-      ),
-    ),
-    ),
-    BackdropFilter(
-    filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
-    child: Container(
-    color: Colors.white.withValues(alpha: 0.08), // global frost tint
-    ),
-    ),
-
-      SafeArea(
-        child: RefreshIndicator(
-          onRefresh: _refreshDashboard,
-          child: CustomScrollView(
-            slivers: [
-              // Header Section
-              SliverToBoxAdapter(
-                child: _buildHeader(),
+          children: [
+            // 🔹 Gradient Background
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/back.png'), // 👈 your image path
+                  fit: BoxFit.cover,
+                ),
+                gradient: const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFF6A5ACD), Color(0xFF9370DB)],
+                ),
               ),
-
-              // Overview Section
-              SliverToBoxAdapter(
-                child: _buildOverviewSection(),
+            ),
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
+              child: Container(
+                color: Colors.white.withValues(alpha: 0.08), // global frost tint
               ),
+            ),
 
-              // Quick Controls Section
-              SliverToBoxAdapter(
-                child: _buildQuickControlsSection(),
+            SafeArea(
+              child: RefreshIndicator(
+                onRefresh: _refreshDashboard,
+                child: CustomScrollView(
+                  slivers: [
+                    // Header Section
+                    SliverToBoxAdapter(
+                      child: _buildHeader(),
+                    ),
+
+                    // Overview Section
+                    SliverToBoxAdapter(
+                      child: _buildOverviewSection(),
+                    ),
+
+                    // Quick Controls Section
+                    SliverToBoxAdapter(
+                      child: _buildQuickControlsSection(),
+                    ),
+
+                    // Rooms Section
+                    SliverToBoxAdapter(
+                      child: _buildRoomsSection(),
+                    ),
+
+                    // Scenes Section
+                    SliverToBoxAdapter(
+                      child: _buildScenesSection(),
+                    ),
+
+                    // Recent Activity Section
+                    SliverToBoxAdapter(
+                      child: _buildRecentActivitySection(),
+                    ),
+
+                    // Bottom padding
+                    const SliverToBoxAdapter(
+                      child: SizedBox(height: 20),
+                    ),
+                  ],
+                ),
               ),
+            ),
 
-              // Rooms Section
-              SliverToBoxAdapter(
-                child: _buildRoomsSection(),
-              ),
-
-              // Scenes Section
-              SliverToBoxAdapter(
-                child: _buildScenesSection(),
-              ),
-
-              // Recent Activity Section
-              SliverToBoxAdapter(
-                child: _buildRecentActivitySection(),
-              ),
-
-              // Bottom padding
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 20),
-              ),
-            ],
-          ),
-        ),
-      ),
-
-    ]),
+          ]),
     );
   }
 
@@ -485,13 +510,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-              text,
-              style: GoogleFonts.montserrat(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
+                text,
+                style: GoogleFonts.montserrat(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
               ),
-            ),
             ),
           ],
         ),
@@ -566,6 +591,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   color: Colors.black87,
                 ),
               ),
+
               const SizedBox(height: 8),
               ...devices.map((device){
                 bool isOn = device['status'] == 'ON';
@@ -1118,14 +1144,17 @@ class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notifications'),
-        backgroundColor: const Color(0xFF483D8B),
-        foregroundColor: Colors.white,
-      ),
-      body: const Center(
-        child: Text('Notifications will appear here'),
+    return MainLayout(
+      currentIndex: 0, // home button active
+      body: Scaffold(
+        appBar: AppBar(
+          title: const Text('Notifications'),
+          backgroundColor: const Color(0xFF483D8B),
+          foregroundColor: Colors.white,
+        ),
+        body: const Center(
+          child: Text('Notifications will appear here'),
+        ),
       ),
     );
   }

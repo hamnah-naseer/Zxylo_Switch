@@ -4,8 +4,8 @@ import 'package:ui_common/ui_common.dart';
 import '../../../../core/shared/presentation/widgets/sh_app_bar.dart';
 import '../widgets/lighted_background.dart';
 import '../widgets/page_indicators.dart';
-import '../widgets/sm_home_bottom_navigation.dart';
 import '../widgets/smart_room_page_view.dart';
+import '../screens/main_layout.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -40,9 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return LightedBackgound(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: const ShAppBar(),
+      child: MainLayout( // ✅ use MainLayout (not main_layout)
+        currentIndex: 0, // 👈 active tab (Home)
         body: SafeArea(
           child: Column(
             children: [
@@ -66,9 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           PageIndicators(
                             roomSelectorNotifier: roomSelectorNotifier,
                             pageNotifier: pageNotifier,
-                          ),
-                          SmHomeBottomNavigationBar(
-                            roomSelectorNotifier: roomSelectorNotifier,
                           ),
                         ],
                       ),

@@ -2,6 +2,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../home/presentation/screens/main_layout.dart';
+
 
 class EnergyConsumptionScreen extends StatefulWidget {
   const EnergyConsumptionScreen({super.key});
@@ -58,14 +60,17 @@ class _EnergyConsumptionScreenState extends State<EnergyConsumptionScreen>
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black87),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+    return MainLayout(
+        currentIndex: 1, // ✅ Usage button active
+        body: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black87),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
         title: Text(
           'Energy Consumption',
           style: GoogleFonts.montserrat(
@@ -159,6 +164,7 @@ class _EnergyConsumptionScreenState extends State<EnergyConsumptionScreen>
         ),
       ),
      ),
+    )
     );
   }
 

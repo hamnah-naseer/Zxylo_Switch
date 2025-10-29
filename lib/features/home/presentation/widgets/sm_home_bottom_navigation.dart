@@ -1,57 +1,42 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/core.dart';
-
 class SmHomeBottomNavigationBar extends StatelessWidget {
-  const SmHomeBottomNavigationBar({
-    super.key,
-    required this.roomSelectorNotifier,
-  });
+  final int currentIndex;
+  final ValueChanged<int> onTap;
 
-  final ValueNotifier<int> roomSelectorNotifier;
+  const SmHomeBottomNavigationBar({
+    Key? key,
+    required this.currentIndex,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: ValueListenableBuilder<int>(
-        valueListenable: roomSelectorNotifier,
-        builder: (_, value, child) => AnimatedOpacity(
-          duration: kThemeAnimationDuration,
-          opacity: value != -1 ? 0 : 1,
-          child: AnimatedContainer(
-            duration: kThemeAnimationDuration,
-            transform:
-                Matrix4.translationValues(0, value != -1 ? -30.0 : 0.0, 0),
-            child: child,
-          ),
+    return BottomNavigationBar(
+      currentIndex: currentIndex,
+      onTap: onTap,
+      type: BottomNavigationBarType.fixed,
+      selectedItemColor: Colors.blue,
+      unselectedItemColor: Colors.grey,
+      backgroundColor: Colors.white,
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
         ),
-        child: BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.all(8),
-                child: Icon(SHIcons.lock),
-              ),
-              label: 'UNLOCK',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.all(8),
-                child: Icon(SHIcons.home),
-              ),
-              label: 'MAIN',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.all(8),
-                child: Icon(SHIcons.settings),
-              ),
-              label: 'SETTINGS',
-            ),
-          ],
+        BottomNavigationBarItem(
+          icon: Icon(Icons.devices_other),
+          label: 'Devices',
         ),
-      ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.analytics),
+          label: 'Usage',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings),
+          label: 'Settings',
+        ),
+      ],
     );
   }
 }
