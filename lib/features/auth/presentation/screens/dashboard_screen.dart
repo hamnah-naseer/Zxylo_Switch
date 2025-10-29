@@ -117,7 +117,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/back.png'), // 👈 your image path
+                  image: AssetImage('assets/images/back.png'),
                   fit: BoxFit.cover,
                 ),
                 gradient: const LinearGradient(
