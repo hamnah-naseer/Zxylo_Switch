@@ -20,28 +20,18 @@ class LightedBackgound extends StatelessWidget {
         Transform.scale(
           scale: 2,
           alignment: Alignment.center,
-          child: Transform(
-            transform: Matrix4.identity()
-              ..setEntry(3, 2, 0.001)
-              ..rotateY(1.4)
-              ..rotateX(0.1)
-              ..setTranslationRaw(90, -80, 0),
             child: const DecoratedBox(
               decoration: BoxDecoration(
-                gradient: RadialGradient(
-                  focal: Alignment.topCenter,
-                  center: Alignment(0, -0.55),
-                  colors: [
-                    Colors.white,
-                    Color(0xFF20B2AA),
-                    Color(0xFF483D8B),
-                  ],
-                  stops: [0.0, 0.3, 1.0],
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFF3E5C76), Color(0xFF1D2D44)],
+                  stops: [0.1, 0.3],
                 ),
               ),
             ),
           ),
-        ),
+
         child,
       ],
     );

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ui_common/ui_common.dart';
 
+import '../../../../core/services/firebase_service.dart';
+import '../../../../core/shared/domain/entities/smart_room.dart';
 import '../../../../core/shared/presentation/widgets/sh_app_bar.dart';
+import '../../../auth/presentation/screens/add_room_screen.dart';
 import '../widgets/lighted_background.dart';
 import '../widgets/page_indicators.dart';
 import '../widgets/smart_room_page_view.dart';
@@ -46,17 +49,41 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               const SizedBox(height: 24),
-              Text("SELECT A ROOM", style: context.bodyLarge),
+              Text("SELECT A ROOM",
+                style: context.bodyLarge.copyWith(
+                fontSize: 24,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+              ),
               height32,
               Expanded(
                 child: Stack(
                   fit: StackFit.expand,
                   clipBehavior: Clip.none,
                   children: [
-                    SmartRoomsPageView(
-                      pageNotifier: pageNotifier,
-                      roomSelectorNotifier: roomSelectorNotifier,
-                      controller: controller,
+                    StreamBuilder<List<SmartRoom>>(
+                      stream: FirebaseService().getRoomsStream(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+
+                        final rooms = snapshot.data!;
+
+                        return SmartRoomsPageView(
+                          pageNotifier: pageNotifier,
+                          roomSelectorNotifier: roomSelectorNotifier,
+                          controller: controller,
+                          rooms: rooms,
+                          onAddRoomTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const AddRoomScreen()),
+                            );
+                          },
+                        );
+                      },
                     ),
                     Positioned.fill(
                       top: null,

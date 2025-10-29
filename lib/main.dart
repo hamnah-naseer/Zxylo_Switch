@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; // ✅ screenutil import
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'features/auth/presentation/screens/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:firebase_database/firebase_database.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+late final FirebaseDatabase database;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  database = FirebaseDatabase.instanceFor(
+    app: Firebase.app(),
+    databaseURL:
+    'https://xyloswitch-f87ed-default-rtdb.europe-west1.firebasedatabase.app',
+  );
+
   runApp(const MyApp());
 }
 
@@ -17,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(375, 812), // ✅ base size (tum apni UI k hisaab se adjust kr skte ho)
+      designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
@@ -26,7 +33,7 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-      child: const SplashScreen(), // ✅ SplashScreen ko child banaya
+      child: const SplashScreen(),
     );
   }
 }

@@ -6,15 +6,19 @@ import '../../../smart_room/screens/room_details_screen.dart';
 
 class SmartRoomsPageView extends StatelessWidget {
   const SmartRoomsPageView({
-    super.key,
+    Key? key,
     required this.pageNotifier,
     required this.roomSelectorNotifier,
     required this.controller,
-  });
+    required this.rooms,
+    required this.onAddRoomTap,
+  }): super(key: key);
 
   final ValueNotifier<double> pageNotifier;
   final ValueNotifier<int> roomSelectorNotifier;
   final PageController controller;
+  final List<SmartRoom> rooms;
+  final VoidCallback onAddRoomTap;
 
   double _getOffsetX(double percent) => percent.isNegative ? 30.0 : -30.0;
 
@@ -31,12 +35,28 @@ class SmartRoomsPageView extends StatelessWidget {
         valueListenable: roomSelectorNotifier,
         builder: (_, selected, __) => PageView.builder(
           clipBehavior: Clip.none,
-          itemCount: SmartRoom.fakeValues.length,
+          itemCount: rooms.length + 1,
+          //itemCount: SmartRoom.fakeValues.length,
           controller: controller,
           itemBuilder: (_, index) {
+            if (index == rooms.length) {
+              return GestureDetector(
+                onTap: onAddRoomTap, // triggers your Add Room flow
+                child: Card(
+                  color: Colors.grey.withOpacity(0.2),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Center(
+                    child: Icon(Icons.add, color: Colors.white, size: 40),
+                  ),
+                ),
+              );
+
+            }
             final percent = page - index;
             final isSelected = selected == index;
-            final room = SmartRoom.fakeValues[index];
+            final room = rooms[index];
             return AnimatedContainer(
               duration: kThemeAnimationDuration,
               curve: Curves.fastOutSlowIn,

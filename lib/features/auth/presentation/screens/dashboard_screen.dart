@@ -7,6 +7,8 @@ import 'dart:ui';
 import 'energy_consumption_screen.dart';
 import 'package:xyloswitch/features/home/presentation/screens/home_screen.dart';
 
+import 'login_screen.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -15,7 +17,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  String houseName = "My Smart Home";
+  String houseName = "Home";
   bool isEditingHouseName = false;
   final TextEditingController _houseNameController = TextEditingController();
   final _authService = AuthService();
@@ -185,9 +187,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Color(0xFF483D8B),
+                size: 20,
+              ),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              },
+            ),
+          ),
+          const SizedBox(width: 4),
           Expanded(
             child: Row(
               children: [
+
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
@@ -201,6 +233,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ],
                   ),
+
                   child: const Icon(
                     Icons.home,
                     color: Color(0xFF483D8B),
@@ -226,9 +259,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       : Text(
                     houseName,
                     style: GoogleFonts.montserrat(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -236,7 +269,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   onPressed: _toggleHouseNameEdit,
                   icon: Icon(
                     isEditingHouseName ? Icons.check : Icons.edit,
-                    color: const Color(0xFF483D8B),
+                    color: Colors.white,
                     size: 20,
                   ),
                 ),
@@ -244,7 +277,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.all(8),
+            width: 40,
+            height: 40,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -289,11 +323,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
 
-          const SizedBox(width: 12),
+          const SizedBox(width: 4),
 
           // Logout button
           Container(
-            padding: const EdgeInsets.all(8),
+            width: 40,
+            height: 40,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -330,7 +365,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             style: GoogleFonts.montserrat(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 16),
@@ -451,7 +486,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             style: GoogleFonts.montserrat(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 16),
@@ -537,7 +572,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               style: GoogleFonts.montserrat(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: Colors.white,
               ),
             ),
           ),
@@ -695,7 +730,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             style: GoogleFonts.montserrat(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 16),
@@ -779,7 +814,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             style: GoogleFonts.montserrat(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 16),

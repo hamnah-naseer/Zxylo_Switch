@@ -5,7 +5,9 @@ import 'package:xyloswitch/core/shared/domain/entities/smart_device.dart';
 import 'music_info.dart';
 
 class SmartRoom {
+
   SmartRoom({
+
     required this.id,
     required this.name,
     required this.imageUrl,
@@ -15,6 +17,8 @@ class SmartRoom {
     required this.airCondition,
     required this.timer,
     required this.musicInfo,
+    this.esp32Id,
+    this.relays,
   });
 
   final String id;
@@ -26,6 +30,8 @@ class SmartRoom {
   final SmartDevice airCondition;
   final SmartDevice timer;
   final MusicInfo musicInfo;
+  final String? esp32Id;
+  final Map<String, bool>? relays;
 
   SmartRoom copyWith({
     String? id,
@@ -37,6 +43,8 @@ class SmartRoom {
     SmartDevice? airCondition,
     SmartDevice? timer,
     MusicInfo? musicInfo,
+    String? esp32Id,
+    Map<String, bool>? relays,
   }) =>
       SmartRoom(
         id: id ?? this.id,
@@ -48,7 +56,37 @@ class SmartRoom {
         airCondition: airCondition ?? this.airCondition,
         musicInfo: musicInfo ?? this.musicInfo,
         timer: timer ?? this.timer,
+        esp32Id: esp32Id ?? this.esp32Id,
+        relays: relays ?? this.relays,
       );
+  factory SmartRoom.fromFirebase(String id, Map data) {
+    return SmartRoom(
+      id: id,
+      name: data['name'] ?? 'Unnamed Room',
+      imageUrl: data['imageUrl'] ?? '',
+      temperature: (data['temperature'] ?? 0).toDouble(),
+      airHumidity: (data['airHumidity'] ?? 0).toDouble(),
+      lights: SmartDevice(isOn: false, value: 0),
+      airCondition: SmartDevice(isOn: false, value: 0),
+      timer: SmartDevice(isOn: false, value: 0),
+      musicInfo: MusicInfo(
+        isOn: false,
+        currentSong: Song.defaultSong,
+      ),
+      esp32Id: data['esp32Id'] ?? '',
+      relays: Map<String, bool>.from(data['relays'] ?? {}),
+    );
+  }
+
+  // 🔹 Convert to Firebase map
+  Map<String, dynamic> toMap() => {
+    'name': name,
+    'imageUrl': imageUrl,
+    'temperature': temperature,
+    'airHumidity': airHumidity,
+    'esp32Id': esp32Id ?? '',
+    'relays': relays ?? {},
+  };
 
   static List<SmartRoom> fakeValues = [
     _room,
@@ -72,6 +110,8 @@ final _room = SmartRoom(
     isOn: false,
     currentSong: Song.defaultSong,
   ),
+  esp32Id: 'ESP32_001', // example
+  relays: {'relay1': true, 'relay2': false},
 );
 
 const _imagesUrls = [
