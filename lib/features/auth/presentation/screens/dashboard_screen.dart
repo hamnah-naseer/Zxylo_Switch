@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../home/presentation/screens/main_layout.dart';
@@ -6,6 +7,7 @@ import 'add_room_screen.dart';
 import 'dart:ui';
 import 'energy_consumption_screen.dart';
 import 'package:xyloswitch/features/home/presentation/screens/home_screen.dart';
+import 'package:xyloswitch/features/home/presentation/screens/main_layout.dart';
 
 import 'login_screen.dart';
 
@@ -21,13 +23,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool isEditingHouseName = false;
   final TextEditingController _houseNameController = TextEditingController();
   final _authService = AuthService();
-  List<Map<String, dynamic>> rooms = [];
+  List<Map<String, dynamic>> rooms= [];
 
 
   @override
   void initState() {
     super.initState();
     _houseNameController.text = houseName;
+    fetchRooms();
   }
 
   @override
@@ -44,6 +47,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
       }
     });
   }
+  Future<void> fetchRooms() async {
+    final snapshot = await FirebaseFirestore.instance.collection('rooms').get();
+
+    final List<Map<String, dynamic>> fetchedRooms = snapshot.docs.map((doc) {
+      return {
+        'name': doc['name'] ?? 'Unnamed Room',
+        'imageUrl': doc['imageUrl'] ?? 'assets/images/default_room.jpg',
+        'devices': [
+          {
+            'name': 'Relay 1',
+            'status': doc['relay1'] == true ? 'ON' : 'OFF',
+            'icon': Icons.flash_on,
+          },
+          {
+            'name': 'Relay 2',
+            'status': doc['relay2'] == true ? 'ON' : 'OFF',
+            'icon': Icons.lightbulb_outline,
+          },
+        ],
+      };
+    }).toList();
+
+    setState(() {
+      rooms = fetchedRooms;
+    });
+  }
+
 
   Future<void> _refreshDashboard() async {
     // TODO: Implement dashboard refresh logic
@@ -91,7 +121,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
 
-      // 👇 ADD THIS NAV BAR HERE
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
@@ -584,8 +613,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 for (var room in rooms) ...[
                   _buildRoomCard(
-                    name: room['name'],
-                    devices: List<Map<String, dynamic>>.from(room['devices']),
+                    name: room['name']?? 'Unnamed ',
+                    devices: List<Map<String, dynamic>>.from(room['devices'] ?? []),
                   ),
                   const SizedBox(width: 16),
                 ],
@@ -618,15 +647,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                name,
-                style: GoogleFonts.montserrat(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+          ClipRRect(
+             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+           child: Image.asset(
+                 'assets/images/0.jpeg',
+                 height: 70,
+                 width: double.infinity,
+                  fit: BoxFit.cover,
                 ),
+           ),
+          Padding(
+              padding: const EdgeInsets.all(8.0),
+
+              child:Text(
+                       name,
+                       style: GoogleFonts.montserrat(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                           color: Colors.black87,
+                       ),
               ),
 
+          ),
               const SizedBox(height: 8),
               ...devices.map((device){
                 bool isOn = device['status'] == 'ON';
@@ -903,7 +945,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final newRoom = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const AddRoomScreen(),
+        builder: (context) =>  AddRoomScreen(
+          onRoomAdded: (room) {
+            setState(() {
+              rooms.add(room);
+            });
+          },
+        ),
       ),
     );
 

@@ -3,7 +3,6 @@ import 'package:ui_common/ui_common.dart';
 
 import '../../../../core/services/firebase_service.dart';
 import '../../../../core/shared/domain/entities/smart_room.dart';
-import '../../../../core/shared/presentation/widgets/sh_app_bar.dart';
 import '../../../auth/presentation/screens/add_room_screen.dart';
 import '../widgets/lighted_background.dart';
 import '../widgets/page_indicators.dart';
@@ -43,8 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return LightedBackgound(
-      child: MainLayout( // ✅ use MainLayout (not main_layout)
-        currentIndex: 0, // 👈 active tab (Home)
+      child: MainLayout(
+        currentIndex: 0,
         body: SafeArea(
           child: Column(
             children: [
@@ -65,11 +64,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     StreamBuilder<List<SmartRoom>>(
                       stream: FirebaseService().getRoomsStream(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
                           return const Center(child: CircularProgressIndicator());
+                        }
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              "Error loading rooms: ${snapshot.error}",
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                          );
+                        }
+                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              "No rooms found 😔",
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                            ),
+                          );
                         }
 
                         final rooms = snapshot.data!;
+                        print(" Rooms fetched: ${rooms.length}");
 
                         return SmartRoomsPageView(
                           pageNotifier: pageNotifier,
@@ -79,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onAddRoomTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (_) => const AddRoomScreen()),
+                              MaterialPageRoute(builder: (_) => AddRoomScreen(onRoomAdded: (Map<String, dynamic> p1) {  },)),
                             );
                           },
                         );

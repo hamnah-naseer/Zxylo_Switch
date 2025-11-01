@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'features/auth/presentation/screens/splash_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+
+import 'features/home/presentation/screens/main_layout.dart';
+
 late final FirebaseDatabase database;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,8 +32,11 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           home: child,
+
+
         );
       },
+
       child: const SplashScreen(),
     );
   }

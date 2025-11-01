@@ -6,6 +6,7 @@ import 'music_info.dart';
 
 class SmartRoom {
 
+
   SmartRoom({
 
     required this.id,
@@ -17,6 +18,9 @@ class SmartRoom {
     required this.airCondition,
     required this.timer,
     required this.musicInfo,
+    required this.espId,
+    required this.devices,
+    required this.status,
     this.esp32Id,
     this.relays,
   });
@@ -32,6 +36,9 @@ class SmartRoom {
   final MusicInfo musicInfo;
   final String? esp32Id;
   final Map<String, bool>? relays;
+  final String espId;
+  final List<dynamic> devices;
+  final String status;
 
   SmartRoom copyWith({
     String? id,
@@ -45,6 +52,10 @@ class SmartRoom {
     MusicInfo? musicInfo,
     String? esp32Id,
     Map<String, bool>? relays,
+    String? espId,
+    List<dynamic>? devices,
+    String? status,
+
   }) =>
       SmartRoom(
         id: id ?? this.id,
@@ -56,7 +67,9 @@ class SmartRoom {
         airCondition: airCondition ?? this.airCondition,
         musicInfo: musicInfo ?? this.musicInfo,
         timer: timer ?? this.timer,
-        esp32Id: esp32Id ?? this.esp32Id,
+        espId: espId ?? this.espId,
+        devices: devices ?? this.devices,
+        status: status ?? this.status,
         relays: relays ?? this.relays,
       );
   factory SmartRoom.fromFirebase(String id, Map data) {
@@ -75,6 +88,9 @@ class SmartRoom {
       ),
       esp32Id: data['esp32Id'] ?? '',
       relays: Map<String, bool>.from(data['relays'] ?? {}),
+      espId: data['espId'] ?? '',
+      devices: List.from(data['devices'] ?? []),
+      status: data['status'] ?? 'inactive',
     );
   }
 
@@ -86,6 +102,9 @@ class SmartRoom {
     'airHumidity': airHumidity,
     'esp32Id': esp32Id ?? '',
     'relays': relays ?? {},
+    'espId': espId,
+    'devices': devices,
+    'status': status,
   };
 
   static List<SmartRoom> fakeValues = [
@@ -112,6 +131,9 @@ final _room = SmartRoom(
   ),
   esp32Id: 'ESP32_001', // example
   relays: {'relay1': true, 'relay2': false},
+  espId: 'ESP32_001',
+  devices: [],
+  status: 'inactive',
 );
 
 const _imagesUrls = [

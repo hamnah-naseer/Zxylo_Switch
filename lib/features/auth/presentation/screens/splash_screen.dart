@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dashboard_screen.dart';
 import 'login_screen.dart';
 
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -21,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+
 
     _animationController = AnimationController(
       duration: const Duration(seconds: 2),
@@ -44,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen>
           context,
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) =>
-             const DashboardScreen(), //const LoginScreen(),
+             const LoginScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(opacity: animation, child: child);
             },
