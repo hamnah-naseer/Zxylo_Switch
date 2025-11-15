@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../home/presentation/screens/main_layout.dart';
@@ -48,31 +49,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
   Future<void> fetchRooms() async {
-    final snapshot = await FirebaseFirestore.instance.collection('rooms').get();
+    final databaseRef = FirebaseDatabase.instance.ref("Rooms");
 
-    final List<Map<String, dynamic>> fetchedRooms = snapshot.docs.map((doc) {
-      return {
-        'name': doc['name'] ?? 'Unnamed Room',
-        'imageUrl': doc['imageUrl'] ?? 'assets/images/default_room.jpg',
-        'devices': [
-          {
-            'name': 'Relay 1',
-            'status': doc['relay1'] == true ? 'ON' : 'OFF',
-            'icon': Icons.flash_on,
-          },
-          {
-            'name': 'Relay 2',
-            'status': doc['relay2'] == true ? 'ON' : 'OFF',
-            'icon': Icons.lightbulb_outline,
-          },
-        ],
-      };
-    }).toList();
+    final snapshot = await databaseRef.get();
+    final Map<dynamic, dynamic>? roomsMap = snapshot.value as Map<dynamic, dynamic>?;
 
-    setState(() {
-      rooms = fetchedRooms;
-    });
+    if (roomsMap != null) {
+      final List<Map<String, dynamic>> fetchedRooms = roomsMap.entries.map((entry) {
+        final roomData = entry.value as Map<dynamic, dynamic>;
+        return {
+          'name': roomData['name'] ?? 'Unnamed Room',
+          'espId': roomData['espId'] ?? '',
+          'devices': [
+            {
+              'name': 'Relay 1',
+              'status': roomData['status'] == 'ON' ? 'ON' : 'OFF',
+              'icon': Icons.flash_on,
+            },
+            {
+              'name': 'Relay 2',
+              'status': roomData['status'] == 'ON' ? 'ON' : 'OFF',
+              'icon': Icons.lightbulb_outline,
+            },
+          ],
+        };
+      }).toList();
+
+      setState(() {
+        rooms = fetchedRooms;
+      });
+    }
   }
+
 
 
   Future<void> _refreshDashboard() async {
@@ -614,6 +622,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 for (var room in rooms) ...[
                   _buildRoomCard(
                     name: room['name']?? 'Unnamed ',
+                    espId: room['espId'] ?? '',
                     devices: List<Map<String, dynamic>>.from(room['devices'] ?? []),
                   ),
                   const SizedBox(width: 16),
@@ -626,7 +635,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-  Widget _buildRoomCard({required String name, required List<Map<String, dynamic>> devices}) {
+  Widget _buildRoomCard({required String name, required String espId,required List<Map<String, dynamic>> devices}) {
     return GestureDetector(
       onTap: _navigateToHomeScreen,
       child: Container(
@@ -707,8 +716,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           setState(() {
                             device['status'] = value ? 'ON' : 'OFF';
                           });
+
+                          final databaseRef = FirebaseDatabase.instance.ref("Rooms/$espId");
+                          databaseRef.update({
+                            'status': value ? 'ON' : 'OFF',
+                          });
                         },
                       ),
+
                     ],
                   ),
                 );

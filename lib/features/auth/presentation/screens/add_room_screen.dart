@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../../../core/services/firebase_service.dart';
-import '../../../../core/shared/domain/entities/music_info.dart';
-import '../../../../core/shared/domain/entities/smart_device.dart';
-import '../../../../core/shared/domain/entities/smart_room.dart';
+import 'package:firebase_database/firebase_database.dart';
+
+import 'DeviceControlPage.dart';
+import 'login_screen.dart';
 
 class AddRoomScreen extends StatefulWidget {
-  final Function(Map<String, dynamic>) onRoomAdded;
-  const AddRoomScreen({super.key, required this.onRoomAdded});
+  final Function(Map<String, dynamic>)? onRoomAdded;
+  const AddRoomScreen({super.key, this.onRoomAdded});
+
   @override
   State<AddRoomScreen> createState() => _AddRoomScreenState();
 }
@@ -14,57 +15,66 @@ class AddRoomScreen extends StatefulWidget {
 class _AddRoomScreenState extends State<AddRoomScreen> {
   final _roomNameController = TextEditingController();
   final _espIdController = TextEditingController();
-  bool _isLoading = false;
 
-  Future<void> _addRoom() async {
+  final databaseRef = FirebaseDatabase.instance.ref("Rooms");
+
+  bool _isSaving = false;
+
+  // 🔹 Save room to Firebase
+  Future<void> _saveRoom() async {
     final roomName = _roomNameController.text.trim();
     final espId = _espIdController.text.trim();
 
     if (roomName.isEmpty || espId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter both Room Name and ESP32 ID')),
+        const SnackBar(
+          content: Text("Please enter both Room Name and ESP32 ID"),
+        ),
       );
       return;
     }
 
-    setState(() => _isLoading = true);
+
+
+    setState(() => _isSaving = true);
 
     try {
-
-      final newRoom = SmartRoom(
-        id: '', // will be auto-assigned by Firebase
-        name: roomName,
-        imageUrl: 'assets/images/0.jpeg', // default image
-        temperature: 0.0,
-        airHumidity: 0.0,
-        lights: SmartDevice(isOn: false, value: 0),
-        airCondition: SmartDevice(isOn: false, value: 0),
-        timer: SmartDevice(isOn: false, value: 0),
-        musicInfo: MusicInfo(isOn: false, currentSong: Song.defaultSong),
-        esp32Id: espId,
-        relays: {'relay1': false, 'relay2': false},
-        espId: espId,
-        devices: [],
-        status: 'inactive',
-      );
-
-      await FirebaseService().addRoom(newRoom);
-      widget.onRoomAdded({
+      print("Saving room...");
+      await databaseRef.child(espId).set({
         'name': roomName,
         'espId': espId,
-      });
+        'status': 'OFF',
 
-      if (!mounted) return;
-      Navigator.pop(context);
+      });
+      print("Room saved! Navigating...");
+      // 🔹 Call Dashboard callback to update room list
+      if (widget.onRoomAdded != null) {
+        widget.onRoomAdded!({
+          'name': roomName,
+          'devices': [
+            {'name': 'Relay 1', 'status': 'OFF', 'icon': Icons.flash_on},
+            {'name': 'Relay 2', 'status': 'OFF', 'icon': Icons.lightbulb_outline},
+          ],
+        });
+      }
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$roomName added successfully!')),
+        SnackBar(content: Text("Room '$roomName' added successfully!")),
+      );
+
+
+      // Navigate to DeviceControlPage with the ESP32 chipId
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DeviceControlPage(chipId: espId),
+        ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error adding room: $e')),
+        SnackBar(content: Text("Error adding room: $e")),
       );
     } finally {
-      setState(() => _isLoading = false);
+      setState(() => _isSaving = false);
     }
   }
 
@@ -87,7 +97,7 @@ class _AddRoomScreenState extends State<AddRoomScreen> {
             TextField(
               controller: _espIdController,
               decoration: const InputDecoration(
-                labelText: 'ESP32 ID',
+                labelText: 'ESP32 Chip ID',
                 hintText: 'Enter your ESP32 unique ID',
                 border: OutlineInputBorder(),
               ),
@@ -97,7 +107,7 @@ class _AddRoomScreenState extends State<AddRoomScreen> {
               width: double.infinity,
               child: ElevatedButton.icon(
                 icon: const Icon(Icons.save),
-                label: _isLoading
+                label: _isSaving
                     ? const SizedBox(
                   height: 20,
                   width: 20,
@@ -107,9 +117,11 @@ class _AddRoomScreenState extends State<AddRoomScreen> {
                   ),
                 )
                     : const Text('Save Room'),
-                onPressed: _isLoading ? null : _addRoom,
+                onPressed: _isSaving ? null : _saveRoom,
+
               ),
             ),
+
           ],
         ),
       ),

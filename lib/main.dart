@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'features/auth/presentation/screens/add_room_screen.dart';
 import 'features/auth/presentation/screens/splash_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 
