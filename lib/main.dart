@@ -3,9 +3,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'features/auth/presentation/screens/add_room_screen.dart';
 import 'features/auth/presentation/screens/splash_screen.dart';
+<<<<<<< Updated upstream
 import 'package:firebase_database/firebase_database.dart';
 
 import 'features/home/presentation/screens/main_layout.dart';
+=======
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:google_sign_in/google_sign_in.dart';
+>>>>>>> Stashed changes
 
 late final FirebaseDatabase database;
 void main() async {

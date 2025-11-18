@@ -1,5 +1,4 @@
 //import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/firebase_database.dart';
 import '../../main.dart';
 import '../shared/domain/entities/smart_room.dart';
 
