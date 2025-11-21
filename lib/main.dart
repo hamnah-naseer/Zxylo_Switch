@@ -20,7 +20,7 @@ void main() async {
   database = FirebaseDatabase.instanceFor(
     app: Firebase.app(),
     databaseURL:
-    'https://xyloswitch-f87ed-default-rtdb.europe-west1.firebasedatabase.app',
+    'https://xylo-switch-default-rtdb.asia-southeast1.firebasedatabase.app/',
   );
 
   runApp(const MyApp());

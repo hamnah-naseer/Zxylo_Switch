@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "430057925240",
+    "firebase_url": "https://xylo-switch-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "xylo-switch",
+    "storage_bucket": "xylo-switch.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430057925240:android:2eb3854a95b2e90a9d1b8d",
+        "android_client_info": {
+          "package_name": "xylo.switch_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "430057925240-2ns5ko54lbtmgmohe5e9vmkn7mecidel.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2nUv59JaPFTOZ9cGV8G1VxAWDT6d0k3E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "430057925240-2ns5ko54lbtmgmohe5e9vmkn7mecidel.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

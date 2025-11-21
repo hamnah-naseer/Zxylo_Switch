@@ -43,13 +43,13 @@ class _AuthInputFieldState extends State<AuthInputField> {
         keyboardType: widget.keyboardType ?? TextInputType.text,
         style: GoogleFonts.montserrat(
           fontSize: 14,
-          color: const Color(0xFFCBC9E6),
+          color: const Color(0xFF0E0E13),
         ),
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: GoogleFonts.montserrat(
             fontSize: 14,
-            color: const Color(0xFFEAEDF3).withValues(alpha:0.6),
+            color: const Color(0xFFF7F7FD).withValues(alpha:0.6),
           ),
           prefixIcon: widget.icon != null
               ? Icon(
