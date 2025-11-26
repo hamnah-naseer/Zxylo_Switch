@@ -143,7 +143,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       width: 6,
                                       height: 6,
                                       decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color: Colors.white60,
                                         borderRadius: BorderRadius.circular(3),
                                       ),
                                     ),
@@ -191,7 +191,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 flex: 3,
                 child: Container(
                   decoration: const BoxDecoration(
-                    color: Colors.white,
+                    color: Colors.blueGrey,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30),
@@ -287,22 +287,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             },
                           ),
                           const SizedBox(height: 16),
-                          AuthInputField(
-                            controller: _retypePasswordController,
-                            hintText: 'Retype Password',
-                            icon: Icons.lock,
-                            isPassword: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please retype your password';
-                              }
-                              if (value != _passwordController.text) {
-                                return 'Passwords do not match';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 20),
                           Row(
                             children: [
                               Checkbox(
