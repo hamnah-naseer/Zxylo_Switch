@@ -188,6 +188,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             hintColor: Colors.white,
                             validator: (value) {
                               if (value == null || value.isEmpty) return 'Please enter your email';
+                              if (value.length < 5) return 'Email must be at least 5 characters';
+                              if (value.length > 254) return 'Email cannot exceed 254 characters';
                               if (!RegExp(r'^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Please enter a valid email';
                               return null;
                             },
@@ -218,6 +220,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             validator: (value) {
                               if (value == null || value.isEmpty) return 'Please enter a password';
                               if (value.length < 6) return 'Password must be at least 6 characters';
+                              if (value.length > 128) return 'Password cannot exceed 128 characters';
                               return null;
                             },
                           ),

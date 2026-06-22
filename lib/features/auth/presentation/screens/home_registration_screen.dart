@@ -26,16 +26,22 @@ class _HomeRegistrationScreenState extends State<HomeRegistrationScreen> {
 
     String? error;
     if (_isCreating) {
-      if (_nameController.text.trim().isEmpty) {
+      final name = _nameController.text.trim();
+      if (name.isEmpty) {
         error = "Please enter a home name";
+      } else if (name.length > 50) {
+        error = "Home name cannot exceed 50 characters";
       } else {
-        error = await authService.createHome(_nameController.text.trim());
+        error = await authService.createHome(name);
       }
     } else {
-      if (_codeController.text.trim().isEmpty) {
+      final code = _codeController.text.trim();
+      if (code.isEmpty) {
         error = "Please enter a home code";
+      } else if (code.length != 6) {
+        error = "Home code must be exactly 6 characters";
       } else {
-        error = await authService.joinHome(_codeController.text.trim());
+        error = await authService.joinHome(code);
       }
     }
 
